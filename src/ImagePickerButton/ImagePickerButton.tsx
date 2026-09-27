@@ -47,6 +47,8 @@ export interface ImagePickerButtonProps<TFile = File, TResult = void> {
   /** Start in the `done` state (the slot already has an image). */
   hasImage?: boolean;
   onError?: (error: unknown) => void;
+  /** Told on every state change — e.g. to disable the parent form's Save while uploading. */
+  onStatusChange?: (status: ImagePickerStatus) => void;
   disabled?: boolean;
 }
 
@@ -89,6 +91,7 @@ export function ImagePickerButton<TFile = File, TResult = void>({
   accept = DEFAULT_IMAGE_ACCEPT,
   hasImage,
   onError,
+  onStatusChange,
   disabled = false,
 }: ImagePickerButtonProps<TFile, TResult>): React.ReactElement {
   const { theme } = useUi();
@@ -100,6 +103,7 @@ export function ImagePickerButton<TFile = File, TResult = void>({
     hasImage,
     onError,
     onUploaded,
+    onStatusChange,
   });
   const view = useMemo(() => resolvePickerView(status, labels), [status, labels]);
   const isUploading = status === ImagePickerStatus.Uploading;

@@ -31,6 +31,11 @@ export interface UseImageUploadOptions<TFile, TResult = void> {
   hasImage?: boolean;
   /** Told about a failed pick or upload (logging / toasts). */
   onError?: (error: unknown) => void;
+  /**
+   * Told every time the slot changes state, so a parent can gate its own Save
+   * while an upload is in flight (`status === ImagePickerStatus.Uploading`).
+   */
+  onStatusChange?: (status: ImagePickerStatus) => void;
 }
 
 export interface ImageUploadState {
@@ -50,6 +55,7 @@ export function useImageUpload<TFile, TResult = void>({
   hasImage = false,
   onError,
   onUploaded,
+  onStatusChange,
 }: UseImageUploadOptions<TFile, TResult>): ImageUploadState {
   const [status, setStatus] = useState<ImagePickerStatus>(
     hasImage ? ImagePickerStatus.Done : ImagePickerStatus.Idle,
@@ -64,8 +70,14 @@ export function useImageUpload<TFile, TResult = void>({
     };
   }, []);
 
+  // Latest callback in a ref: a new inline arrow each render must not re-create `pick`.
+  const statusListener = useRef(onStatusChange);
+  statusListener.current = onStatusChange;
+
   const settle = useCallback((next: ImagePickerStatus): void => {
-    if (mounted.current) setStatus(next);
+    if (!mounted.current) return;
+    setStatus(next);
+    statusListener.current?.(next);
   }, []);
 
   const pick = useCallback(async (): Promise<void> => {

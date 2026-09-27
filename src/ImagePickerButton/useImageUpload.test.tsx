@@ -136,3 +136,48 @@ describe('resolvePickerView', () => {
     expect(resolvePickerView(ImagePickerStatus.Done, LABELS)).toMatchObject({ buttonLabel: 'replace', statusText: 'done' });
   });
 });
+
+describe('useImageUpload onStatusChange', () => {
+  it('reports uploading then done, so a parent can gate its Save', async () => {
+    const gate = deferred();
+    const onStatusChange = jest.fn();
+    const { result } = renderHook(() =>
+      useImageUpload({ upload: () => gate.promise, pickFile: async () => 'f', onStatusChange }),
+    );
+    expect(onStatusChange).not.toHaveBeenCalled();
+
+    let run: Promise<void> = Promise.resolve();
+    await act(async () => {
+      run = result.current.pick();
+    });
+    expect(onStatusChange).toHaveBeenLastCalledWith(ImagePickerStatus.Uploading);
+
+    await act(async () => {
+      gate.resolve();
+      await run;
+    });
+    expect(onStatusChange.mock.calls).toEqual([[ImagePickerStatus.Uploading], [ImagePickerStatus.Done]]);
+  });
+
+  it('reports error when the upload rejects', async () => {
+    const onStatusChange = jest.fn();
+    const { result } = renderHook(() =>
+      useImageUpload({ upload: () => Promise.reject(new Error('x')), pickFile: async () => 'f', onStatusChange }),
+    );
+    await act(async () => {
+      await result.current.pick();
+    });
+    expect(onStatusChange).toHaveBeenLastCalledWith(ImagePickerStatus.Error);
+  });
+
+  it('reports nothing when the pick is cancelled', async () => {
+    const onStatusChange = jest.fn();
+    const { result } = renderHook(() =>
+      useImageUpload({ upload: jest.fn(), pickFile: async () => null, onStatusChange }),
+    );
+    await act(async () => {
+      await result.current.pick();
+    });
+    expect(onStatusChange).not.toHaveBeenCalled();
+  });
+});
