@@ -20,9 +20,11 @@ export function pickWebImage(accept: string = DEFAULT_IMAGE_ACCEPT): Promise<Fil
   });
 }
 
-export interface UseImageUploadOptions<TFile> {
+export interface UseImageUploadOptions<TFile, TResult = void> {
   /** Consumer-owned transport. Resolve = stored; reject = error state. No network code lives here. */
-  upload: (file: TFile) => Promise<void>;
+  upload: (file: TFile) => Promise<TResult>;
+  /** Given what `upload` resolved with (e.g. the stored URL), once the slot is `done`. */
+  onUploaded?: (result: TResult) => void;
   /** Picks one file; `null` means the user cancelled. */
   pickFile: () => Promise<TFile | null>;
   /** Start in `done` when the slot already holds an image. */
@@ -42,12 +44,13 @@ export interface ImageUploadState {
  * done or error back to uploading on the next pick. A cancelled pick leaves the
  * state as it was, so cancelling "Replace" does not wipe a finished upload.
  */
-export function useImageUpload<TFile>({
+export function useImageUpload<TFile, TResult = void>({
   upload,
   pickFile,
   hasImage = false,
   onError,
-}: UseImageUploadOptions<TFile>): ImageUploadState {
+  onUploaded,
+}: UseImageUploadOptions<TFile, TResult>): ImageUploadState {
   const [status, setStatus] = useState<ImagePickerStatus>(
     hasImage ? ImagePickerStatus.Done : ImagePickerStatus.Idle,
   );
@@ -68,11 +71,13 @@ export function useImageUpload<TFile>({
   const pick = useCallback(async (): Promise<void> => {
     if (busy.current) return;
     busy.current = true;
+    // Boxed so a falsy / void result still counts as uploaded.
+    let uploaded: { result: TResult } | null = null;
     try {
       const file = await pickFile();
       if (file === null) return;
       settle(ImagePickerStatus.Uploading);
-      await upload(file);
+      uploaded = { result: await upload(file) };
       settle(ImagePickerStatus.Done);
     } catch (error) {
       settle(ImagePickerStatus.Error);
@@ -80,7 +85,9 @@ export function useImageUpload<TFile>({
     } finally {
       busy.current = false;
     }
-  }, [pickFile, upload, onError, settle]);
+    // Outside the try: a throwing consumer callback must not repaint a stored upload as failed.
+    if (uploaded !== null) onUploaded?.(uploaded.result);
+  }, [pickFile, upload, onError, onUploaded, settle]);
 
   return { status, pick };
 }

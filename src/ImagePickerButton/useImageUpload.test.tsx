@@ -82,6 +82,48 @@ describe('useImageUpload', () => {
   });
 });
 
+describe('useImageUpload onUploaded', () => {
+  it('passes the upload result to onUploaded once done', async () => {
+    const onUploaded = jest.fn();
+    const { result } = renderHook(() =>
+      useImageUpload({ upload: async () => 'https://cdn/a.png', pickFile: async () => 'f', onUploaded }),
+    );
+    await act(async () => {
+      await result.current.pick();
+    });
+    expect(result.current.status).toBe(ImagePickerStatus.Done);
+    expect(onUploaded).toHaveBeenCalledWith('https://cdn/a.png');
+  });
+
+  it('does not call onUploaded when upload rejects or the pick is cancelled', async () => {
+    const onUploaded = jest.fn();
+    const failing = renderHook(() =>
+      useImageUpload({ upload: () => Promise.reject(new Error('x')), pickFile: async () => 'f', onUploaded }),
+    );
+    const cancelled = renderHook(() => useImageUpload({ upload: async () => 1, pickFile: async () => null, onUploaded }));
+    await act(async () => {
+      await failing.result.current.pick();
+      await cancelled.result.current.pick();
+    });
+    expect(onUploaded).not.toHaveBeenCalled();
+  });
+
+  it('keeps the slot done when onUploaded throws', async () => {
+    const onError = jest.fn();
+    const onUploaded = jest.fn(() => {
+      throw new Error('consumer bug');
+    });
+    const { result } = renderHook(() =>
+      useImageUpload({ upload: async () => 'u', pickFile: async () => 'f', onUploaded, onError }),
+    );
+    await act(async () => {
+      await expect(result.current.pick()).rejects.toThrow('consumer bug');
+    });
+    expect(result.current.status).toBe(ImagePickerStatus.Done);
+    expect(onError).not.toHaveBeenCalled();
+  });
+});
+
 describe('resolvePickerView', () => {
   it('maps each status to its button label and status line', () => {
     expect(resolvePickerView(ImagePickerStatus.Idle, LABELS)).toMatchObject({ buttonLabel: 'pick', statusText: null });

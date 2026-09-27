@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import { FramingAction } from '../framing/FramingAction';
+import { PhotoAnchor, resolvePhotoAnchor } from './PhotoAnchor';
 import { PhotoFramingEditor } from './PhotoFramingEditor';
 import type { PhotoFramingLabels, PhotoFramingPreviewArgs } from './types';
 
@@ -21,11 +22,12 @@ const LABELS: PhotoFramingLabels = {
   },
 };
 
-const setup = (value: { x?: number; y?: number; scale?: number } | null) => {
+const setup = (value: { x?: number; y?: number; scale?: number } | null, anchor?: PhotoAnchor) => {
   const onChange = jest.fn();
   const renderPreview = jest.fn((_args: PhotoFramingPreviewArgs) => null);
   render(
     <PhotoFramingEditor
+      anchor={anchor}
       labels={LABELS}
       renderPreview={renderPreview}
       testID="fe"
@@ -56,6 +58,8 @@ describe('PhotoFramingEditor', () => {
     expect(renderPreview).toHaveBeenLastCalledWith({
       framing: { x: 60, y: -5, scale: 1.2 },
       transform: [{ translateX: '60%' }, { translateY: '-5%' }, { scale: 1.2 }],
+      anchor: PhotoAnchor.Center,
+      objectPosition: 'center center',
     });
     expect(screen.getByTestId('fe-scale').textContent).toBe('120%');
   });
@@ -64,5 +68,19 @@ describe('PhotoFramingEditor', () => {
     const { onChange } = setup({ x: 10, y: 10, scale: 2 });
     fireEvent.click(screen.getByTestId('fe-reset'));
     expect(onChange).toHaveBeenLastCalledWith({ x: 0, y: 0, scale: 1 });
+  });
+
+  it('hands the preview the bottom anchor for a cut-out', () => {
+    const { renderPreview } = setup(null, PhotoAnchor.Bottom);
+    expect(renderPreview).toHaveBeenLastCalledWith(
+      expect.objectContaining({ anchor: PhotoAnchor.Bottom, objectPosition: 'center bottom' }),
+    );
+  });
+});
+
+describe('resolvePhotoAnchor', () => {
+  it('maps center and bottom to their layout', () => {
+    expect(resolvePhotoAnchor(PhotoAnchor.Center)).toEqual({ justifyContent: 'center', objectPosition: 'center center' });
+    expect(resolvePhotoAnchor(PhotoAnchor.Bottom)).toEqual({ justifyContent: 'flex-end', objectPosition: 'center bottom' });
   });
 });

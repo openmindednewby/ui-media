@@ -14,6 +14,8 @@ export { useImageUpload, pickWebImage, DEFAULT_IMAGE_ACCEPT } from './ImagePicke
 export type { UseImageUploadOptions, ImageUploadState } from './ImagePickerButton/useImageUpload';
 
 export { PhotoFramingEditor } from './PhotoFramingEditor/PhotoFramingEditor';
+export { PhotoAnchor, resolvePhotoAnchor } from './PhotoFramingEditor/PhotoAnchor';
+export type { PhotoAnchorLayout } from './PhotoFramingEditor/PhotoAnchor';
 export type {
   PhotoFramingEditorProps,
   PhotoFramingLabels,

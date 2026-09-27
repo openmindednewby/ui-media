@@ -33,8 +33,11 @@ export interface ImagePickerLabels {
   hint: string;
 }
 
-export interface ImagePickerButtonProps<TFile = File> {
-  upload: (file: TFile) => Promise<void>;
+export interface ImagePickerButtonProps<TFile = File, TResult = void> {
+  /** Consumer transport; whatever it resolves with (e.g. the stored URL) goes to `onUploaded`. */
+  upload: (file: TFile) => Promise<TResult>;
+  /** Called with `upload`'s result once the slot is `done`. */
+  onUploaded?: (result: TResult) => void;
   labels: ImagePickerLabels;
   testID: string;
   /** Defaults to the browser file dialog. Native consumers pass their own picker. */
@@ -77,8 +80,9 @@ const styles = StyleSheet.create({
   status: { fontSize: STATUS_FONT_SIZE },
 });
 
-export function ImagePickerButton<TFile = File>({
+export function ImagePickerButton<TFile = File, TResult = void>({
   upload,
+  onUploaded,
   labels,
   testID,
   pickFile,
@@ -86,11 +90,17 @@ export function ImagePickerButton<TFile = File>({
   hasImage,
   onError,
   disabled = false,
-}: ImagePickerButtonProps<TFile>): React.ReactElement {
+}: ImagePickerButtonProps<TFile, TResult>): React.ReactElement {
   const { theme } = useUi();
   // The default picker yields a DOM File; a consumer with another TFile supplies `pickFile`.
   const webPick = useCallback(() => pickWebImage(accept) as Promise<TFile | null>, [accept]);
-  const { status, pick } = useImageUpload<TFile>({ upload, pickFile: pickFile ?? webPick, hasImage, onError });
+  const { status, pick } = useImageUpload<TFile, TResult>({
+    upload,
+    pickFile: pickFile ?? webPick,
+    hasImage,
+    onError,
+    onUploaded,
+  });
   const view = useMemo(() => resolvePickerView(status, labels), [status, labels]);
   const isUploading = status === ImagePickerStatus.Uploading;
   const statusColor = view.isError ? theme.semantic.error['500'] : theme.colors.textSecondary;

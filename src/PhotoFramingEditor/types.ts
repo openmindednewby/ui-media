@@ -3,6 +3,7 @@ import type React from 'react';
 import type { FramingAction } from '../framing/FramingAction';
 import type { PhotoFraming, PhotoFramingInput, PhotoFramingTransform } from '../framing/photoFraming';
 import type { PhotoFramingSteps } from '../framing/stepFraming';
+import type { PhotoAnchor } from './PhotoAnchor';
 
 /** Name + hint of one control. `label` is the full phrase ("Move photo up"). */
 export interface FramingActionLabel {
@@ -26,6 +27,10 @@ export interface PhotoFramingPreviewArgs {
   framing: PhotoFraming;
   /** Ready to spread onto the photo: `style={{ transform }}`. */
   transform: PhotoFramingTransform;
+  /** The editor's `anchor` prop (default `center`). */
+  anchor: PhotoAnchor;
+  /** CSS `object-position` for that anchor, ready for the photo's style. */
+  objectPosition: string;
 }
 
 export interface PhotoFramingEditorProps {
@@ -41,4 +46,6 @@ export interface PhotoFramingEditorProps {
   /** Override the default arrow / plus / minus glyphs (e.g. with ui-icons). */
   renderGlyph?: (action: FramingAction, color: string, size: number) => React.ReactNode;
   disabled?: boolean;
+  /** Where the photo sits in the preview. `bottom` for cut-outs (kefi `.amb-photo`). Default `center`. */
+  anchor?: PhotoAnchor;
 }

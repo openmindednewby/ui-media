@@ -17,6 +17,7 @@ import type { FramingAction } from '../framing/FramingAction';
 import { clampFraming, framingToTransform } from '../framing/photoFraming';
 import { stepFraming } from '../framing/stepFraming';
 import { FramingControls } from './FramingControls';
+import { PhotoAnchor, resolvePhotoAnchor } from './PhotoAnchor';
 import type { PhotoFramingEditorProps } from './types';
 
 const GAP = 16;
@@ -37,11 +38,13 @@ export const PhotoFramingEditor = ({
   steps,
   renderGlyph,
   disabled = false,
+  anchor = PhotoAnchor.Center,
 }: PhotoFramingEditorProps): React.ReactElement => {
   const { width } = useWindowDimensions();
   const wide = width >= LAYOUT_COLLAPSE_BREAKPOINT;
   const framing = useMemo(() => clampFraming(value), [value]);
   const transform = useMemo(() => framingToTransform(framing), [framing]);
+  const anchorLayout = useMemo(() => resolvePhotoAnchor(anchor), [anchor]);
 
   const onAction = useCallback(
     (action: FramingAction): void => onChange(stepFraming(framing, action, steps)),
@@ -50,8 +53,11 @@ export const PhotoFramingEditor = ({
 
   return (
     <View style={[styles.root, wide ? styles.rootWide : null]} testID={testID}>
-      <View style={[styles.preview, wide ? styles.previewWide : null]} testID={`${testID}-preview`}>
-        {renderPreview({ framing, transform })}
+      <View
+        style={[styles.preview, { justifyContent: anchorLayout.justifyContent }, wide ? styles.previewWide : null]}
+        testID={`${testID}-preview`}
+      >
+        {renderPreview({ framing, transform, anchor, objectPosition: anchorLayout.objectPosition })}
       </View>
       <FramingControls
         disabled={disabled}
