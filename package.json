@@ -1,33 +1,77 @@
 {
   "name": "@dloizides/ui-media",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Themable React Native (RN-web) media controls: ImagePickerButton (idle/uploading/error/done around a consumer-supplied upload function) and PhotoFramingEditor (live frame preview, size stepper, position d-pad). The framing bounds and clamp are also exported from the framework-free '@dloizides/ui-media/framing' subpath. Part of the dloizides.com shared UI kit.",
-  "keywords": ["react", "react-native", "react-native-web", "ui", "image", "upload", "photo", "dloizides"],
+  "keywords": [
+    "react",
+    "react-native",
+    "react-native-web",
+    "ui",
+    "image",
+    "upload",
+    "photo",
+    "dloizides"
+  ],
   "author": "dloizides",
   "license": "MIT",
-  "repository": { "type": "git", "url": "https://github.com/openmindednewby/ui-media.git" },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openmindednewby/ui-media.git"
+  },
   "homepage": "https://github.com/openmindednewby/ui-media#readme",
-  "bugs": { "url": "https://github.com/openmindednewby/ui-media/issues" },
+  "bugs": {
+    "url": "https://github.com/openmindednewby/ui-media/issues"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "react-native": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
-      "browser": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
-      "require": { "types": "./dist/index.d.ts", "default": "./dist/index.js" },
-      "import": { "types": "./dist/index.d.mts", "default": "./dist/index.mjs" },
-      "default": { "types": "./dist/index.d.ts", "default": "./dist/index.js" }
+      "react-native": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "browser": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     },
     "./framing": {
-      "require": { "types": "./dist/framing.d.ts", "default": "./dist/framing.js" },
-      "import": { "types": "./dist/framing.d.mts", "default": "./dist/framing.mjs" },
-      "default": { "types": "./dist/framing.d.ts", "default": "./dist/framing.js" }
+      "require": {
+        "types": "./dist/framing.d.ts",
+        "default": "./dist/framing.js"
+      },
+      "import": {
+        "types": "./dist/framing.d.mts",
+        "default": "./dist/framing.mjs"
+      },
+      "default": {
+        "types": "./dist/framing.d.ts",
+        "default": "./dist/framing.js"
+      }
     }
   },
-  "files": ["dist", "README.md", "CHANGELOG.md"],
+  "files": [
+    "dist",
+    "README.md",
+    "CHANGELOG.md"
+  ],
   "sideEffects": false,
-  "engines": { "node": ">=18.0.0" },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "build": "rimraf dist && tsup",
     "test": "jest",
