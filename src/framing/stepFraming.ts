@@ -16,7 +16,7 @@ export const PHOTO_FRAMING_STEPS: PhotoFramingSteps = Object.freeze({ offsetPct:
 const PRECISION = 1000;
 const round = (n: number): number => Math.round(n * PRECISION) / PRECISION;
 
-type MoveAction = Exclude<FramingAction, typeof FramingAction.Reset>;
+type MoveAction = Exclude<FramingAction, FramingAction.Reset>;
 
 /** [x, y, scale] direction of each non-reset action. */
 const DIRECTIONS: Record<MoveAction, readonly [number, number, number]> = {

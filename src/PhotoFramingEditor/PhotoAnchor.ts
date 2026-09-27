@@ -1,15 +1,12 @@
 /**
- * Where the photo sits inside the preview frame. `Bottom` matches a kefi-landings
- * cut-out (`.amb-photo img`: 4:5, `object-fit: contain`, `object-position: center
- * bottom`) — feet on the floor of the card. An `as const` object rather than a TS
- * `const enum` for the same isolatedModules reason as FramingAction.
+ * Where the photo sits inside its frame. `Bottom` is for cut-out portraits
+ * (`object-fit: contain; object-position: center bottom`): feet on the floor of
+ * the card.
  */
-export const PhotoAnchor = {
-  Center: 'center',
-  Bottom: 'bottom',
-} as const;
-
-export type PhotoAnchor = (typeof PhotoAnchor)[keyof typeof PhotoAnchor];
+export const enum PhotoAnchor {
+  Center = 'center',
+  Bottom = 'bottom',
+}
 
 export interface PhotoAnchorLayout {
   /** Applied to the editor's preview column: where the consumer's card sits vertically. */

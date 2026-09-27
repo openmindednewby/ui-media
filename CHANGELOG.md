@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+- KEFI-PEOPLE-1 T10d "Organizer people editor: anchored photo in the package": new `AnchoredPhoto` (`uri`, `anchor`, `framing`, `style`, `accessibilityLabel`, `testID`) paints a contained, framed photo anchored to the centre or bottom of its parent box. RN-web's Image ignores `object-position`, so the photo is sized to its measured aspect (`useImageAspectRatio`, exported) and placed by flexbox. Pure `resolveAnchoredPhotoLayout` exported. Moved out of kefi-web `PersonPhoto`.
+
 ## 0.3.0
 
 - KEFI-PEOPLE-1 T10b "Organizer people editor: ui-media adoption gaps" (backwards compatible):

@@ -46,6 +46,6 @@ export interface PhotoFramingEditorProps {
   /** Override the default arrow / plus / minus glyphs (e.g. with ui-icons). */
   renderGlyph?: (action: FramingAction, color: string, size: number) => React.ReactNode;
   disabled?: boolean;
-  /** Where the photo sits in the preview. `bottom` for cut-outs (kefi `.amb-photo`). Default `center`. */
+  /** Where the photo sits in the preview. `bottom` for cut-out portraits. Default `center`. */
   anchor?: PhotoAnchor;
 }

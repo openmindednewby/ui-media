@@ -1,10 +1,9 @@
 /**
- * Photo framing: the `{x, y, scale}` an organiser sets on a performer card.
+ * Photo framing: the `{x, y, scale}` an editor sets on a photo card.
  *
  * The bounds, default, clamp and identity check come from
- * `@dloizides/site-template-kit/framing` — the same module the kefi-landings
- * renderer builds its `--photo-tf` CSS from (KEFI-PEOPLE-1 T12 "Organizer people
- * editor: shared photo framing"). One copy, so the editor can never offer a value
+ * `@dloizides/site-template-kit/framing` — the same module the static landing
+ * renderer builds its `--photo-tf` CSS from. One copy, so the editor can never offer a value
  * the landing page would silently clamp away.
  *
  * That subpath imports nothing (no ajv, no JSON Schema), so this file stays

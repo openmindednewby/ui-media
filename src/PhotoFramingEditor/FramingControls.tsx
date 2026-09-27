@@ -9,6 +9,7 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { IconButton } from '@dloizides/ui-buttons';
 import { useUi } from '@dloizides/ui-feedback';
+import { MIN_TARGET_PX } from '@dloizides/ui-layout';
 
 import { FramingAction } from '../framing/FramingAction';
 import type { PhotoFraming } from '../framing/photoFraming';
@@ -16,8 +17,8 @@ import type { PhotoFramingSteps } from '../framing/stepFraming';
 import { canStepFraming } from '../framing/stepFraming';
 import type { PhotoFramingLabels } from './types';
 
-/** WCAG AA touch target; IconButton `md` is this size, the d-pad spacers match it. */
-const TARGET = 44;
+/** IconButton `md` is ui-layout's minimum hit box; the d-pad spacers match it. */
+const TARGET = MIN_TARGET_PX;
 const GAP = 8;
 const SECTION_GAP = 16;
 const HEADING_SIZE = 13;

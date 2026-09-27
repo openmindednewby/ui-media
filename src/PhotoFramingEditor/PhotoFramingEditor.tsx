@@ -1,5 +1,5 @@
 /**
- * PhotoFramingEditor — the KEFI-PEOPLE-1 "A2" framing screen: a live preview of
+ * PhotoFramingEditor — a photo framing screen: a live preview of
  * the consumer's own card (render prop) beside a zoom stepper and a position
  * d-pad. The value is `{x, y, scale}`, clamped to PHOTO_FRAMING_BOUNDS, the same
  * rules the public landing page applies — the preview is what ships.

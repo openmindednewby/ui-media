@@ -16,6 +16,11 @@ export type { UseImageUploadOptions, ImageUploadState } from './ImagePickerButto
 export { PhotoFramingEditor } from './PhotoFramingEditor/PhotoFramingEditor';
 export { PhotoAnchor, resolvePhotoAnchor } from './PhotoFramingEditor/PhotoAnchor';
 export type { PhotoAnchorLayout } from './PhotoFramingEditor/PhotoAnchor';
+export { AnchoredPhoto } from './AnchoredPhoto/AnchoredPhoto';
+export type { AnchoredPhotoProps } from './AnchoredPhoto/AnchoredPhoto';
+export { useImageAspectRatio } from './AnchoredPhoto/useImageAspectRatio';
+export { resolveAnchoredPhotoLayout } from './AnchoredPhoto/resolveAnchoredPhotoLayout';
+export type { AnchoredPhotoLayout } from './AnchoredPhoto/resolveAnchoredPhotoLayout';
 export type {
   PhotoFramingEditorProps,
   PhotoFramingLabels,
