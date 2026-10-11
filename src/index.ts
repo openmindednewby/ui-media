@@ -11,6 +11,7 @@ export { ImagePickerButton, resolvePickerView } from './ImagePickerButton/ImageP
 export type { ImagePickerButtonProps, ImagePickerLabels, PickerView } from './ImagePickerButton/ImagePickerButton';
 export { ImagePickerStatus } from './ImagePickerButton/ImagePickerStatus';
 export { useImageUpload, pickWebImage, DEFAULT_IMAGE_ACCEPT } from './ImagePickerButton/useImageUpload';
+export { pickWebFile } from './pickWebFile/pickWebFile';
 export type { UseImageUploadOptions, ImageUploadState } from './ImagePickerButton/useImageUpload';
 
 export { PhotoFramingEditor } from './PhotoFramingEditor/PhotoFramingEditor';

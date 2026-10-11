@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0
+
+- New `pickWebFile(accept)`: opens the browser file dialog for one file of any type (web only, `null` on cancel or native). `pickWebImage` now delegates to it, behaviour unchanged (RUPEP-5 "Upload the RuPEP file from the Jobs tab").
+
 ## 0.5.0
 
 - `useImageUpload` / `ImagePickerButton`: `onStatusChange(status)` — told on every state change so a parent form can gate Save while an upload is in flight (KEFI-PEOPLE-1 T21 "Organizer people editor: frontend review fixes").

@@ -1,23 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { pickWebFile } from '../pickWebFile/pickWebFile';
+
 import { ImagePickerStatus } from './ImagePickerStatus';
 
 export const DEFAULT_IMAGE_ACCEPT = 'image/*';
 
-/**
- * Opens the browser's file dialog for ONE file. Resolves `null` on cancel, and
- * where there is no DOM (native) — a native consumer passes its own `pickFile`.
- */
+/** Opens the browser's file dialog for ONE image; delegates to `pickWebFile`. */
 export function pickWebImage(accept: string = DEFAULT_IMAGE_ACCEPT): Promise<File | null> {
-  if (typeof document === 'undefined') return Promise.resolve(null);
-  return new Promise((resolve) => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = accept;
-    input.addEventListener('change', () => resolve(input.files?.[0] ?? null), { once: true });
-    input.addEventListener('cancel', () => resolve(null), { once: true });
-    input.click();
-  });
+  return pickWebFile(accept);
 }
 
 export interface UseImageUploadOptions<TFile, TResult = void> {
