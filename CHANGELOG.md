@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.0
+
+- BGREMOVE-1 "In-browser background removal for every app", owner decision D14: the `ImagePickerButton` side action now receives the image.
+  - `ImagePickerSideAction<TFile = File>.onPress(file: TFile | null)`: the last successfully uploaded file, kept in the picker's state; `null` when the slot only holds an image from a URL (`hasImage`). Existing `() => void` handlers still type-check and behave as before.
+  - New opt-in `noFileHint?: string`: when no file is held, the action is disabled and this hint is its accessibility hint. Without it the action stays enabled and gets `null`, as in 0.7.0.
+  - `useImageUpload` returns `file: TFile | null`; `ImageUploadState<TFile = unknown>` is now generic. Pure `resolveSideAction(action, hasFile)` added beside `showsSideAction`.
+  - No URL fetch inside the package: the picker has no network code, a cross-origin or authenticated image URL would fail on CORS or credentials, and the consumer already owns the URL and its transport.
+
 ## 0.7.0
 
 - BGREMOVE-1 "In-browser background removal for every app" AC-5 wave A (all opt-in, no behaviour change by default):

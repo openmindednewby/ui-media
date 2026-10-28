@@ -15,7 +15,7 @@ import { useUi } from '@dloizides/ui-feedback';
 
 import { ImagePickerStatus } from './ImagePickerStatus';
 import type { ImagePickerSideAction } from './showsSideAction';
-import { showsSideAction } from './showsSideAction';
+import { resolveSideAction, showsSideAction } from './showsSideAction';
 import { DEFAULT_IMAGE_ACCEPT, pickWebImage, useImageUpload } from './useImageUpload';
 
 export interface ImagePickerLabels {
@@ -53,7 +53,7 @@ export interface ImagePickerButtonProps<TFile = File, TResult = void> {
   onStatusChange?: (status: ImagePickerStatus) => void;
   disabled?: boolean;
   /** Opt-in secondary action beside the button once an image is uploaded ("Remove background"). */
-  removeBackground?: ImagePickerSideAction;
+  removeBackground?: ImagePickerSideAction<TFile>;
 }
 
 export interface PickerView {
@@ -104,7 +104,7 @@ export function ImagePickerButton<TFile = File, TResult = void>({
   const { theme } = useUi();
   // The default picker yields a DOM File; a consumer with another TFile supplies `pickFile`.
   const webPick = useCallback(() => pickWebImage(accept) as Promise<TFile | null>, [accept]);
-  const { status, pick } = useImageUpload<TFile, TResult>({
+  const { status, file, pick } = useImageUpload<TFile, TResult>({
     upload,
     pickFile: pickFile ?? webPick,
     hasImage,
@@ -114,6 +114,8 @@ export function ImagePickerButton<TFile = File, TResult = void>({
   });
   const view = useMemo(() => resolvePickerView(status, labels), [status, labels]);
   const isUploading = status === ImagePickerStatus.Uploading;
+  const sideAction = removeBackground !== undefined ? resolveSideAction(removeBackground, file !== null) : null;
+  const pressSideAction = useCallback(() => removeBackground?.onPress(file), [removeBackground, file]);
   const statusColor = view.isError ? theme.semantic.error['500'] : theme.colors.textSecondary;
 
   return (
@@ -130,17 +132,17 @@ export function ImagePickerButton<TFile = File, TResult = void>({
         variant={view.variant}
         onPress={pick}
       />
-      {removeBackground !== undefined && showsSideAction(status, removeBackground) ? (
+      {removeBackground !== undefined && sideAction !== null && showsSideAction(status, removeBackground) ? (
         <Button
-          accessibilityHint={removeBackground.hint}
+          accessibilityHint={sideAction.hint}
           accessibilityLabel={removeBackground.label}
           autoLoading={false}
-          disabled={disabled || removeBackground.disabled === true}
+          disabled={disabled || sideAction.disabled}
           label={removeBackground.label}
           loading={removeBackground.loading === true}
           testID={`${testID}-remove-background`}
           variant="outline"
-          onPress={removeBackground.onPress}
+          onPress={pressSideAction}
         />
       ) : null}
       </View>

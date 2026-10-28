@@ -181,3 +181,37 @@ describe('useImageUpload onStatusChange', () => {
     expect(onStatusChange).not.toHaveBeenCalled();
   });
 });
+
+describe('useImageUpload file', () => {
+  it('with an image that came from a URL only, holds no file', () => {
+    const hasImage = true;
+
+    const { result } = renderHook(() => useImageUpload({ upload: jest.fn(), pickFile: async () => 'f', hasImage }));
+
+    expect(result.current.file).toBeNull();
+  });
+
+  it('after a successful upload, holds the picked file', async () => {
+    const { result } = renderHook(() =>
+      useImageUpload({ upload: () => Promise.resolve(), pickFile: async () => 'picked.png' }),
+    );
+
+    await act(async () => {
+      await result.current.pick();
+    });
+
+    expect(result.current.file).toBe('picked.png');
+  });
+
+  it('after a failed upload, does not hold the rejected file', async () => {
+    const { result } = renderHook(() =>
+      useImageUpload({ upload: () => Promise.reject(new Error('x')), pickFile: async () => 'bad.png' }),
+    );
+
+    await act(async () => {
+      await result.current.pick();
+    });
+
+    expect(result.current.file).toBeNull();
+  });
+});

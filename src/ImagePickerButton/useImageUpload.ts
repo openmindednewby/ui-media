@@ -29,8 +29,10 @@ export interface UseImageUploadOptions<TFile, TResult = void> {
   onStatusChange?: (status: ImagePickerStatus) => void;
 }
 
-export interface ImageUploadState {
+export interface ImageUploadState<TFile = unknown> {
   status: ImagePickerStatus;
+  /** The last successfully uploaded file; `null` until one is uploaded (e.g. an image from a URL). */
+  file: TFile | null;
   /** Pick then upload. A second call while one is in flight is ignored. */
   pick: () => Promise<void>;
 }
@@ -47,10 +49,11 @@ export function useImageUpload<TFile, TResult = void>({
   onError,
   onUploaded,
   onStatusChange,
-}: UseImageUploadOptions<TFile, TResult>): ImageUploadState {
+}: UseImageUploadOptions<TFile, TResult>): ImageUploadState<TFile> {
   const [status, setStatus] = useState<ImagePickerStatus>(
     hasImage ? ImagePickerStatus.Done : ImagePickerStatus.Idle,
   );
+  const [file, setFile] = useState<TFile | null>(null);
   const busy = useRef(false);
   const mounted = useRef(true);
 
@@ -77,10 +80,11 @@ export function useImageUpload<TFile, TResult = void>({
     // Boxed so a falsy / void result still counts as uploaded.
     let uploaded: { result: TResult } | null = null;
     try {
-      const file = await pickFile();
-      if (file === null) return;
+      const picked = await pickFile();
+      if (picked === null) return;
       settle(ImagePickerStatus.Uploading);
-      uploaded = { result: await upload(file) };
+      uploaded = { result: await upload(picked) };
+      if (mounted.current) setFile(() => picked);
       settle(ImagePickerStatus.Done);
     } catch (error) {
       settle(ImagePickerStatus.Error);
@@ -92,5 +96,5 @@ export function useImageUpload<TFile, TResult = void>({
     if (uploaded !== null) onUploaded?.(uploaded.result);
   }, [pickFile, upload, onError, onUploaded, settle]);
 
-  return { status, pick };
+  return { status, file, pick };
 }
