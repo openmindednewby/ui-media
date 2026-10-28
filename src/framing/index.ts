@@ -9,3 +9,5 @@ export type { PhotoFraming, PhotoFramingInput, PhotoFramingTransform } from './p
 export { FramingAction } from './FramingAction';
 export { PHOTO_FRAMING_STEPS, stepFraming, canStepFraming } from './stepFraming';
 export type { PhotoFramingSteps } from './stepFraming';
+export { panFraming } from './panFraming';
+export type { PanBox, PanDelta } from './panFraming';

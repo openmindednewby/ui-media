@@ -20,6 +20,8 @@ export interface PhotoFramingLabels {
   /** Readout between the zoom buttons, given a whole percent: (120) => "120%". */
   scaleValue: (percent: number) => string;
   actions: Record<FramingAction, FramingActionLabel>;
+  /** Hint on the preview when `dragToPan` is on: "Drag the photo to move it". */
+  dragHint?: string;
 }
 
 export interface PhotoFramingPreviewArgs {
@@ -48,4 +50,6 @@ export interface PhotoFramingEditorProps {
   disabled?: boolean;
   /** Where the photo sits in the preview. `bottom` for cut-out portraits. Default `center`. */
   anchor?: PhotoAnchor;
+  /** Opt-in: mouse / touch drag on the preview pans the photo. Default off. */
+  dragToPan?: boolean;
 }

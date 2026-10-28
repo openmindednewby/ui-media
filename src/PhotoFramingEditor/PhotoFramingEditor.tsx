@@ -19,6 +19,7 @@ import { stepFraming } from '../framing/stepFraming';
 import { FramingControls } from './FramingControls';
 import { PhotoAnchor, resolvePhotoAnchor } from './PhotoAnchor';
 import type { PhotoFramingEditorProps } from './types';
+import { usePreviewDrag } from './usePreviewDrag';
 
 const GAP = 16;
 
@@ -27,6 +28,7 @@ const styles = StyleSheet.create({
   rootWide: { flexDirection: 'row', alignItems: 'flex-start' },
   preview: { alignItems: 'center', overflow: 'hidden' },
   previewWide: { flexShrink: 1 },
+  draggable: { cursor: 'pointer' },
 });
 
 export const PhotoFramingEditor = ({
@@ -39,6 +41,7 @@ export const PhotoFramingEditor = ({
   renderGlyph,
   disabled = false,
   anchor = PhotoAnchor.Center,
+  dragToPan = false,
 }: PhotoFramingEditorProps): React.ReactElement => {
   const { width } = useWindowDimensions();
   const wide = width >= LAYOUT_COLLAPSE_BREAKPOINT;
@@ -50,12 +53,16 @@ export const PhotoFramingEditor = ({
     (action: FramingAction): void => onChange(stepFraming(framing, action, steps)),
     [framing, onChange, steps],
   );
+  const drag = usePreviewDrag(framing, onChange, dragToPan && !disabled);
 
   return (
     <View style={[styles.root, wide ? styles.rootWide : null]} testID={testID}>
       <View
-        style={[styles.preview, { justifyContent: anchorLayout.justifyContent }, wide ? styles.previewWide : null]}
+        {...drag.handlers}
+        accessibilityHint={drag.handlers !== undefined ? labels.dragHint : undefined}
+        style={[styles.preview, { justifyContent: anchorLayout.justifyContent }, wide ? styles.previewWide : null, drag.handlers !== undefined ? styles.draggable : null]}
         testID={`${testID}-preview`}
+        onLayout={drag.onLayout}
       >
         {renderPreview({ framing, transform, anchor, objectPosition: anchorLayout.objectPosition })}
       </View>

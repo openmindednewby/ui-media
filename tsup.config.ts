@@ -6,7 +6,7 @@ import { defineConfig } from 'tsup';
  * bounds without resolving react-native.
  */
 export default defineConfig({
-  entry: { index: 'src/index.ts', framing: 'src/framing/index.ts' },
+  entry: { index: 'src/index.ts', framing: 'src/framing/index.ts', cutout: 'src/cutout/index.ts' },
   format: ['cjs', 'esm'],
   dts: true,
   splitting: false,

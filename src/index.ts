@@ -10,6 +10,8 @@ export * from './framing';
 export { ImagePickerButton, resolvePickerView } from './ImagePickerButton/ImagePickerButton';
 export type { ImagePickerButtonProps, ImagePickerLabels, PickerView } from './ImagePickerButton/ImagePickerButton';
 export { ImagePickerStatus } from './ImagePickerButton/ImagePickerStatus';
+export { showsSideAction } from './ImagePickerButton/showsSideAction';
+export type { ImagePickerSideAction } from './ImagePickerButton/showsSideAction';
 export { useImageUpload, pickWebImage, DEFAULT_IMAGE_ACCEPT } from './ImagePickerButton/useImageUpload';
 export { pickWebFile } from './pickWebFile/pickWebFile';
 export type { UseImageUploadOptions, ImageUploadState } from './ImagePickerButton/useImageUpload';

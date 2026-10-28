@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.0
+
+- BGREMOVE-1 "In-browser background removal for every app" AC-5 wave A (all opt-in, no behaviour change by default):
+  - New subpath `@dloizides/ui-media/cutout`: `CutoutHost` (mount once; props `engine`, `labels`) and `openCutout(image: Blob): Promise<Blob | null>`, the Compare dialog: side by side from 768 px, drag split below; Keep / Erase / Move brush, zoom, brush size, Use cut-out / Cancel; progress + disabled controls while the model runs. `engine` is structural (`removeBackground`, `attachRefineBrush`, `encodeCutout` from `@dloizides/background-removal`), so the main entry gains no dependency. `@dloizides/ui-forms` >= 1.20.0 is an optional peer used only by the subpath.
+  - `ImagePickerButton`: `removeBackground?: ImagePickerSideAction` renders a secondary button beside the pick button once the slot is `done`. Pure `showsSideAction` exported.
+  - `PhotoFramingEditor`: `dragToPan?: boolean` pans the photo by mouse / touch drag on the preview; `labels.dragHint` is its accessibility hint. Pure `panFraming(start, {dx, dy}, box)` on the framework-free `./framing` subpath.
+
 ## 0.6.0
 
 - New `pickWebFile(accept)`: opens the browser file dialog for one file of any type (web only, `null` on cancel or native). `pickWebImage` now delegates to it, behaviour unchanged (RUPEP-5 "Upload the RuPEP file from the Jobs tab").
