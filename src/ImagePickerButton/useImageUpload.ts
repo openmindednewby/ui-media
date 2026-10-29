@@ -18,7 +18,7 @@ export interface UseImageUploadOptions<TFile, TResult = void> {
   onUploaded?: (result: TResult) => void;
   /** Picks one file; `null` means the user cancelled. */
   pickFile: () => Promise<TFile | null>;
-  /** Start in `done` when the slot already holds an image. */
+  /** `done` while the slot holds an image (followed after mount), `idle` when it is cleared. */
   hasImage?: boolean;
   /** Told about a failed pick or upload (logging / toasts). */
   onError?: (error: unknown) => void;
@@ -73,6 +73,15 @@ export function useImageUpload<TFile, TResult = void>({
     setStatus(next);
     statusListener.current?.(next);
   }, []);
+
+  const seededImage = useRef(hasImage);
+  useEffect(() => {
+    if (seededImage.current === hasImage) return;
+    seededImage.current = hasImage;
+    if (busy.current) return;
+    if (!hasImage) setFile(null);
+    settle(hasImage ? ImagePickerStatus.Done : ImagePickerStatus.Idle);
+  }, [hasImage, settle]);
 
   const pick = useCallback(async (): Promise<void> => {
     if (busy.current) return;

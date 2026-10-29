@@ -215,3 +215,43 @@ describe('useImageUpload file', () => {
     expect(result.current.file).toBeNull();
   });
 });
+
+describe('useImageUpload hasImage', () => {
+  it('with a URL typed after mount, moves from idle to done', () => {
+    const { result, rerender } = renderHook(
+      ({ hasImage }: { hasImage: boolean }) => useImageUpload({ upload: jest.fn(), pickFile: async () => 'f', hasImage }),
+      { initialProps: { hasImage: false } },
+    );
+
+    rerender({ hasImage: true });
+
+    expect(result.current.status).toBe(ImagePickerStatus.Done);
+  });
+
+  it('with the URL cleared, moves from done back to idle', () => {
+    const { result, rerender } = renderHook(
+      ({ hasImage }: { hasImage: boolean }) => useImageUpload({ upload: jest.fn(), pickFile: async () => 'f', hasImage }),
+      { initialProps: { hasImage: true } },
+    );
+
+    rerender({ hasImage: false });
+
+    expect(result.current.status).toBe(ImagePickerStatus.Idle);
+  });
+
+  it('with an upload in flight, keeps uploading when hasImage changes', async () => {
+    const gate = deferred();
+    const { result, rerender } = renderHook(
+      ({ hasImage }: { hasImage: boolean }) => useImageUpload({ upload: () => gate.promise, pickFile: async () => 'f', hasImage }),
+      { initialProps: { hasImage: false } },
+    );
+    await act(async () => {
+      void result.current.pick();
+    });
+
+    rerender({ hasImage: true });
+
+    expect(result.current.status).toBe(ImagePickerStatus.Uploading);
+    await act(async () => gate.resolve());
+  });
+});

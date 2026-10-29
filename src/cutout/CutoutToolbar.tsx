@@ -2,26 +2,25 @@ import React from 'react';
 
 import { StyleSheet, Text, View } from 'react-native';
 
-import { Button } from '@dloizides/ui-buttons';
+import { Button, IconButton } from '@dloizides/ui-buttons';
 import { useUi } from '@dloizides/ui-feedback';
 import { Field, FormCell, FormGrid } from '@dloizides/ui-forms';
 import { MIN_TARGET_PX } from '@dloizides/ui-layout';
 
 import { CUTOUT_BRUSH_RADIUS, canStepZoom, clampBrushRadius } from './cutoutMath';
 import { CutoutTool } from './CutoutTool';
+import { TOOLBAR_GAP, ZOOM_CELL_BASIS, ZOOM_READOUT_WIDTH } from './toolbarGeometry';
 import type { CutoutControlLabel, CutoutLabels } from './types';
 
-const GAP = 8;
-const READOUT_WIDTH = 52;
+const GAP = TOOLBAR_GAP;
 const PERCENT = 100;
 const TOOL_CELL = 220;
-const ZOOM_CELL = 150;
 const SIZE_CELL = 200;
 
 const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: GAP, minHeight: MIN_TARGET_PX },
   grow: { flexGrow: 1, flexBasis: 0 },
-  readout: { minWidth: READOUT_WIDTH, textAlign: 'center' },
+  readout: { minWidth: ZOOM_READOUT_WIDTH, textAlign: 'center' },
   slider: { minHeight: MIN_TARGET_PX, flexGrow: 1, borderWidth: 1, borderRadius: GAP, justifyContent: 'center', paddingHorizontal: GAP },
 });
 
@@ -45,7 +44,16 @@ export const CutoutToolbar = ({ labels, tool, onTool, zoom, onZoom, radius, onRa
     </View>
   );
   const zoomButton = (direction: number, glyph: string, label: CutoutControlLabel, id: string): React.ReactElement => (
-    <Button accessibilityHint={label.hint} accessibilityLabel={label.label} autoLoading={false} disabled={disabled || !canStepZoom(zoom, direction)} label={glyph} testID={`${testID}-${id}`} variant="outline" onPress={() => onZoom(direction)} />
+    <IconButton
+      accessibilityHint={label.hint}
+      actionLabel={label.label}
+      autoLoading={false}
+      disabled={disabled || !canStepZoom(zoom, direction)}
+      renderIcon={(color, size) => <Text style={{ color, fontSize: size }}>{glyph}</Text>}
+      testID={`${testID}-${id}`}
+      variant="outline"
+      onPress={() => onZoom(direction)}
+    />
   );
 
   return (
@@ -59,7 +67,7 @@ export const CutoutToolbar = ({ labels, tool, onTool, zoom, onZoom, radius, onRa
           </View>
         </Field>
       </FormCell>
-      <FormCell basis={ZOOM_CELL} grow={false}>
+      <FormCell basis={ZOOM_CELL_BASIS} grow={false}>
         <Field label={labels.zoom}>
           <View style={styles.row}>
             {zoomButton(-1, '−', labels.zoomOut, 'zoom-out')}
