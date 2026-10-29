@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.9.0
+
+- BGREMOVE-1 "In-browser background removal for every app", visual-qa r2 MEDIUM: the cutout toolbar's zoom "+" no longer overlaps the Brush size slider at 1024+. The zoom steps are 44 px `IconButton`s (no 100 px `Button` floor) and the zoom cell basis is derived from its content (`zoomRowWidth`, `src/cutout/toolbarGeometry.ts`).
+- `useImageUpload` follows `hasImage` after mount: a URL typed later moves the slot `idle` -> `done` (so the side action shows, disabled with `noFileHint`), clearing it moves `done` -> `idle` and drops the held file. An upload in flight is never overridden.
+
 ## 0.8.0
 
 - BGREMOVE-1 "In-browser background removal for every app", owner decision D14: the `ImagePickerButton` side action now receives the image.
