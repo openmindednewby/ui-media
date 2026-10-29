@@ -1,6 +1,6 @@
 {
   "name": "@dloizides/ui-media",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "description": "Themable React Native (RN-web) media controls: ImagePickerButton (idle/uploading/error/done around a consumer-supplied upload function) and PhotoFramingEditor (live frame preview, size stepper, position d-pad). The framing bounds and clamp are also exported from the framework-free '@dloizides/ui-media/framing' subpath. Opt-in '@dloizides/ui-media/cutout' subpath: CutoutHost + openCutout(image), a Compare dialog over @dloizides/background-removal. Part of the dloizides.com shared UI kit.",
   "keywords": [
     "react",
