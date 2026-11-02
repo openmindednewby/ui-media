@@ -54,6 +54,8 @@ export interface ImagePickerButtonProps<TFile = File, TResult = void> {
   disabled?: boolean;
   /** Opt-in secondary action beside the button once an image is uploaded ("Remove background"). */
   removeBackground?: ImagePickerSideAction<TFile>;
+  /** Button variant while the slot is empty. Default `primary`; a secondary upload passes `outline`. */
+  idleVariant?: ButtonVariant;
 }
 
 export interface PickerView {
@@ -65,7 +67,11 @@ export interface PickerView {
 }
 
 /** Pure status -> copy/variant mapping (unit-tested; the component only paints it). */
-export function resolvePickerView(status: ImagePickerStatus, labels: ImagePickerLabels): PickerView {
+export function resolvePickerView(
+  status: ImagePickerStatus,
+  labels: ImagePickerLabels,
+  idleVariant: ButtonVariant = 'primary',
+): PickerView {
   switch (status) {
     case ImagePickerStatus.Uploading:
       return { buttonLabel: labels.uploading, variant: 'outline', statusText: null, isError: false };
@@ -74,7 +80,7 @@ export function resolvePickerView(status: ImagePickerStatus, labels: ImagePicker
     case ImagePickerStatus.Done:
       return { buttonLabel: labels.replace, variant: 'outline', statusText: labels.done, isError: false };
     default:
-      return { buttonLabel: labels.pick, variant: 'primary', statusText: null, isError: false };
+      return { buttonLabel: labels.pick, variant: idleVariant, statusText: null, isError: false };
   }
 }
 
@@ -100,6 +106,7 @@ export function ImagePickerButton<TFile = File, TResult = void>({
   onStatusChange,
   disabled = false,
   removeBackground,
+  idleVariant,
 }: ImagePickerButtonProps<TFile, TResult>): React.ReactElement {
   const { theme } = useUi();
   // The default picker yields a DOM File; a consumer with another TFile supplies `pickFile`.
@@ -112,7 +119,7 @@ export function ImagePickerButton<TFile = File, TResult = void>({
     onUploaded,
     onStatusChange,
   });
-  const view = useMemo(() => resolvePickerView(status, labels), [status, labels]);
+  const view = useMemo(() => resolvePickerView(status, labels, idleVariant), [status, labels, idleVariant]);
   const isUploading = status === ImagePickerStatus.Uploading;
   const sideAction = removeBackground !== undefined ? resolveSideAction(removeBackground, file !== null) : null;
   const pressSideAction = useCallback(() => removeBackground?.onPress(file), [removeBackground, file]);

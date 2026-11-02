@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.10.0
+
+- UIMEDIA-PICKER-VARIANT-1 "ImagePickerButton idle variant prop": opt-in `idleVariant?: ButtonVariant` sets the button variant while the slot is empty, for a secondary upload action. Default `primary`, so existing callers are unchanged; uploading, error and done keep their variants. `resolvePickerView` takes it as an optional third argument.
+
 ## 0.9.0
 
 - BGREMOVE-1 "In-browser background removal for every app", visual-qa r2 MEDIUM: the cutout toolbar's zoom "+" no longer overlaps the Brush size slider at 1024+. The zoom steps are 44 px `IconButton`s (no 100 px `Button` floor) and the zoom cell basis is derived from its content (`zoomRowWidth`, `src/cutout/toolbarGeometry.ts`).
