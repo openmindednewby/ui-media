@@ -113,6 +113,7 @@
     "version": "npm run build"
   },
   "peerDependencies": {
+    "@dloizides/design-tokens": ">=1.15.0",
     "@dloizides/ui-buttons": ">=1.18.0",
     "@dloizides/ui-feedback": ">=1.2.0",
     "@dloizides/ui-forms": ">=1.20.0",
@@ -122,6 +123,7 @@
     "react-native-svg": ">=15.0.0"
   },
   "devDependencies": {
+    "@dloizides/design-tokens": "^1.17.0",
     "@dloizides/ui-buttons": "^1.18.0",
     "@dloizides/ui-feedback": "^1.12.0",
     "@dloizides/ui-forms": "^1.20.0",
