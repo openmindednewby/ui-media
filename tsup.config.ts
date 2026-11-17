@@ -6,7 +6,7 @@ import { defineConfig } from 'tsup';
  * bounds without resolving react-native.
  */
 export default defineConfig({
-  entry: { index: 'src/index.ts', framing: 'src/framing/index.ts', cutout: 'src/cutout/index.ts' },
+  entry: { index: 'src/index.ts', framing: 'src/framing/index.ts', cutout: 'src/cutout/index.ts', qr: 'src/qr/index.ts' },
   format: ['cjs', 'esm'],
   dts: true,
   splitting: false,
@@ -16,5 +16,5 @@ export default defineConfig({
   minify: false,
   target: 'es2020',
   outDir: 'dist',
-  external: ['react', 'react-dom', 'react-native', /^@dloizides\//],
+  external: ['react', 'react-dom', 'react-native', 'react-native-svg', /^@dloizides\//],
 });

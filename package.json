@@ -1,7 +1,7 @@
 {
   "name": "@dloizides/ui-media",
   "version": "0.10.0",
-  "description": "Themable React Native (RN-web) media controls: ImagePickerButton (idle/uploading/error/done around a consumer-supplied upload function) and PhotoFramingEditor (live frame preview, size stepper, position d-pad). The framing bounds and clamp are also exported from the framework-free '@dloizides/ui-media/framing' subpath. Opt-in '@dloizides/ui-media/cutout' subpath: CutoutHost + openCutout(image), a Compare dialog over @dloizides/background-removal. Part of the dloizides.com shared UI kit.",
+  "description": "Themable React Native (RN-web) media controls: ImagePickerButton (idle/uploading/error/done around a consumer-supplied upload function) and PhotoFramingEditor (live frame preview, size stepper, position d-pad). The framing bounds and clamp are also exported from the framework-free '@dloizides/ui-media/framing' subpath. Opt-in '@dloizides/ui-media/cutout' subpath: CutoutHost + openCutout(image), a Compare dialog over @dloizides/background-removal. Opt-in '@dloizides/ui-media/qr' subpath: QrCode (react-native-svg) and buildQrGeometry over qrcode-generator. Part of the dloizides.com shared UI kit.",
   "keywords": [
     "react",
     "react-native",
@@ -75,6 +75,20 @@
         "types": "./dist/cutout.d.ts",
         "default": "./dist/cutout.js"
       }
+    },
+    "./qr": {
+      "require": {
+        "types": "./dist/qr.d.ts",
+        "default": "./dist/qr.js"
+      },
+      "import": {
+        "types": "./dist/qr.d.mts",
+        "default": "./dist/qr.mjs"
+      },
+      "default": {
+        "types": "./dist/qr.d.ts",
+        "default": "./dist/qr.js"
+      }
     }
   },
   "files": [
@@ -104,7 +118,8 @@
     "@dloizides/ui-forms": ">=1.20.0",
     "@dloizides/ui-layout": ">=1.27.0",
     "react": ">=18.0.0",
-    "react-native": ">=0.74.0"
+    "react-native": ">=0.74.0",
+    "react-native-svg": ">=15.0.0"
   },
   "devDependencies": {
     "@dloizides/ui-buttons": "^1.18.0",
@@ -137,10 +152,14 @@
     "typescript": "^5.4.0"
   },
   "dependencies": {
-    "@dloizides/site-template-kit": "^0.4.0"
+    "@dloizides/site-template-kit": "^0.4.0",
+    "qrcode-generator": "^2.0.4"
   },
   "peerDependenciesMeta": {
     "@dloizides/ui-forms": {
+      "optional": true
+    },
+    "react-native-svg": {
       "optional": true
     }
   }

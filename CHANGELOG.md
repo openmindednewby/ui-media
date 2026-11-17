@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.11.0
+
+- QR-SHARED-1 "One shared QR code renderer": opt-in `@dloizides/ui-media/qr` subpath with `QrCode` (react-native-svg, optional peer; colours and label are props) and the framework-free `buildQrGeometry(text)` (one SVG path, 4-module quiet zone) over `qrcode-generator`. First consumer: compliance-console S-33 "New verification"; kefi-web `ticketQr.ts` is the copy to switch.
+
 ## 0.10.0
 
 - UIMEDIA-PICKER-VARIANT-1 "ImagePickerButton idle variant prop": opt-in `idleVariant?: ButtonVariant` sets the button variant while the slot is empty, for a secondary upload action. Default `primary`, so existing callers are unchanged; uploading, error and done keep their variants. `resolvePickerView` takes it as an optional third argument.
