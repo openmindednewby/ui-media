@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.13.0
+
+- INV-EXTRACT-1 W3 "PDF page preview": opt-in `@dloizides/ui-media/pdf` subpath (web). `PdfPageImage` draws one page of a PDF as an `<img>` (`fallback` while drawing, `failure` on error, blob URL revoked on unmount); `createPdfPages(load)` binds `countPdfPages` / `renderPdfPage` to a pdf.js loader the consumer supplies (its own lazy `import()` and worker URL), called once on first use, so pdf.js stays out of the main bundle. `pdfjs-dist` is an optional peer, used for types only. First consumer: invoice-web preview + template sheet.
+
 ## 0.11.0
 
 - QR-SHARED-1 "One shared QR code renderer": opt-in `@dloizides/ui-media/qr` subpath with `QrCode` (react-native-svg, optional peer; colours and label are props) and the framework-free `buildQrGeometry(text)` (one SVG path, 4-module quiet zone) over `qrcode-generator`. First consumer: compliance-console S-33 "New verification"; kefi-web `ticketQr.ts` is the copy to switch.
