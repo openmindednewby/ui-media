@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.0
+
+- INV-BILLS-1 D-BILLS-9 "Every Bills UI part is shared", UI-ATOMIC-1. New organism `FileDropArea`: takes one file by drop on the area, paste anywhere on the page (Ctrl+V) or the Paste button (`readClipboardFile`), or Choose (`pickWebFile`); files outside `accept` (MIME, `type/*` or `.ext`) go to `onReject`, the host shows its `error`; the chosen file previews as an image or its name with Remove. Molecules `DropZone`-internal and `FilePreview`; helpers `isAcceptedFile`, `firstFile`, `previewKindOf`, `useFileDrop`. Labels are props (`FileDropLabels`); web-first, on native Choose and Paste do nothing.
+
 ## 0.13.0
 
 - INV-EXTRACT-1 W3 "PDF page preview": opt-in `@dloizides/ui-media/pdf` subpath (web). `PdfPageImage` draws one page of a PDF as an `<img>` (`fallback` while drawing, `failure` on error, blob URL revoked on unmount); `createPdfPages(load)` binds `countPdfPages` / `renderPdfPage` to a pdf.js loader the consumer supplies (its own lazy `import()` and worker URL), called once on first use, so pdf.js stays out of the main bundle. `pdfjs-dist` is an optional peer, used for types only. First consumer: invoice-web preview + template sheet.

@@ -30,3 +30,14 @@ export type {
   PhotoFramingPreviewArgs,
   FramingActionLabel,
 } from './PhotoFramingEditor/types';
+
+export { FileDropArea } from './FileDropArea/FileDropArea';
+export type { FileDropAreaProps } from './FileDropArea/FileDropArea';
+export type { FileDropLabels } from './FileDropArea/types';
+export { FilePreview } from './FileDropArea/FilePreview';
+export type { FilePreviewProps } from './FileDropArea/FilePreview';
+export { FilePreviewKind } from './FileDropArea/FilePreviewKind';
+export { isAcceptedFile, firstFile, previewKindOf } from './FileDropArea/fileAccept';
+export type { FileLike } from './FileDropArea/fileAccept';
+export { readClipboardFile } from './FileDropArea/readClipboardFile';
+export { useFileDrop } from './FileDropArea/useFileDrop';

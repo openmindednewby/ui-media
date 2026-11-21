@@ -1,0 +1,48 @@
+import { useEffect, useState } from 'react';
+import type { RefObject } from 'react';
+
+import { firstFile } from './fileAccept';
+
+function asElement(node: unknown): HTMLElement | null {
+  const el = node as HTMLElement | null;
+  return el !== null && typeof el.addEventListener === 'function' ? el : null;
+}
+
+/** Web: offers a file dropped on the host or pasted anywhere on the page; returns true while a drag is over the host. */
+export function useFileDrop(host: RefObject<unknown>, offer: (file: File) => void): boolean {
+  const [dragging, setDragging] = useState(false);
+
+  useEffect(() => {
+    const el = asElement(host.current);
+    if (el === null || typeof document === 'undefined') return undefined;
+    const over = (event: DragEvent): void => {
+      event.preventDefault();
+      setDragging(true);
+    };
+    const leave = (): void => setDragging(false);
+    const drop = (event: DragEvent): void => {
+      event.preventDefault();
+      setDragging(false);
+      const file = firstFile(event.dataTransfer?.files);
+      if (file !== null) offer(file);
+    };
+    const paste = (event: ClipboardEvent): void => {
+      const file = firstFile(event.clipboardData?.files);
+      if (file === null) return;
+      event.preventDefault();
+      offer(file);
+    };
+    el.addEventListener('dragover', over);
+    el.addEventListener('dragleave', leave);
+    el.addEventListener('drop', drop);
+    document.addEventListener('paste', paste);
+    return () => {
+      el.removeEventListener('dragover', over);
+      el.removeEventListener('dragleave', leave);
+      el.removeEventListener('drop', drop);
+      document.removeEventListener('paste', paste);
+    };
+  }, [host, offer]);
+
+  return dragging;
+}
