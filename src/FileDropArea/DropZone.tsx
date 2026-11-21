@@ -26,11 +26,11 @@ export interface DropZoneProps {
   labels: FileDropLabels;
   dragging: boolean;
   onChoose: () => void;
-  onPaste: () => void;
+  onPaste?: () => void;
   testID: string;
 }
 
-/** The empty drop target: a dashed box with the prompt, the accepted kinds and Choose / Paste buttons. */
+/** The empty drop target: a dashed box with the prompt, the accepted kinds and Choose / Paste buttons; Paste only when `onPaste` is given. */
 export const DropZone = ({ labels, dragging, onChoose, onPaste, testID }: DropZoneProps): React.ReactElement => {
   const { theme } = useUi();
   const { colors } = theme;
@@ -52,7 +52,7 @@ export const DropZone = ({ labels, dragging, onChoose, onPaste, testID }: DropZo
       <Text style={[styles.hint, { color: colors.textSecondary }]}>{labels.hint}</Text>
       <View style={styles.actions}>
         <Button accessibilityHint={labels.chooseHint} accessibilityLabel={labels.choose} label={labels.choose} testID={`${testID}-choose`} variant="outline" onPress={onChoose} />
-        <Button accessibilityHint={labels.pasteHint} accessibilityLabel={labels.paste} label={labels.paste} testID={`${testID}-paste`} variant="outline" onPress={onPaste} />
+        {onPaste !== undefined && <Button accessibilityHint={labels.pasteHint} accessibilityLabel={labels.paste} label={labels.paste} testID={`${testID}-paste`} variant="outline" onPress={onPaste} />}
       </View>
     </View>
   );

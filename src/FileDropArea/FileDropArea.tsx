@@ -9,6 +9,7 @@ import { isAcceptedFile } from './fileAccept';
 import { FilePreview } from './FilePreview';
 import { readClipboardFile } from './readClipboardFile';
 import type { FileDropLabels } from './types';
+import { useCanPasteFiles } from './useCanPasteFiles';
 import { useFileDrop } from './useFileDrop';
 import { pickWebFile } from '../pickWebFile/pickWebFile';
 
@@ -36,7 +37,7 @@ export interface FileDropAreaProps {
   testID: string;
 }
 
-/** Takes one file by drop, paste (Ctrl+V or the Paste button) or pick; previews it; rejects files outside `accept`. */
+/** Takes one file by drop, paste (Ctrl+V, or the Paste button where the browser can read the clipboard) or pick; previews it; rejects files outside `accept`. */
 export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove, onPasteEmpty, error, testID }: FileDropAreaProps): React.ReactElement => {
   const { theme } = useUi();
   const host = useRef<View>(null);
@@ -48,6 +49,7 @@ export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove,
   }, [accept, onFile, onReject]);
 
   const dragging = useFileDrop(host, offer);
+  const canPaste = useCanPasteFiles();
 
   const choose = useCallback((): void => {
     void pickWebFile(accept.join(',')).then((picked) => {
@@ -70,7 +72,7 @@ export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove,
         </View>
       )}
       {file === null ? (
-        <DropZone dragging={dragging} labels={labels} testID={`${testID}-zone`} onChoose={choose} onPaste={paste} />
+        <DropZone dragging={dragging} labels={labels} testID={`${testID}-zone`} onChoose={choose} onPaste={canPaste ? paste : undefined} />
       ) : (
         <FilePreview file={file} labels={labels} testID={`${testID}-preview`} onRemove={onRemove} />
       )}

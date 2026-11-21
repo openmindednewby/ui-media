@@ -41,3 +41,6 @@ export { isAcceptedFile, firstFile, previewKindOf } from './FileDropArea/fileAcc
 export type { FileLike } from './FileDropArea/fileAccept';
 export { readClipboardFile } from './FileDropArea/readClipboardFile';
 export { useFileDrop } from './FileDropArea/useFileDrop';
+export { canReadClipboardFiles } from './FileDropArea/canReadClipboardFiles';
+export type { ClipboardEnv } from './FileDropArea/canReadClipboardFiles';
+export { useCanPasteFiles } from './FileDropArea/useCanPasteFiles';

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.14.1
+
+- INV-BILLS-1 N3: `FileDropArea` shows its Paste button only where the browser can read a file from the clipboard (`navigator.clipboard.read` present, clipboard-read permission not denied, web only); Ctrl+V on the page keeps working everywhere. New pure `canReadClipboardFiles(env)` and hook `useCanPasteFiles()`. Props unchanged.
+
 ## 0.14.0
 
 - INV-BILLS-1 D-BILLS-9 "Every Bills UI part is shared", UI-ATOMIC-1. New organism `FileDropArea`: takes one file by drop on the area, paste anywhere on the page (Ctrl+V) or the Paste button (`readClipboardFile`), or Choose (`pickWebFile`); files outside `accept` (MIME, `type/*` or `.ext`) go to `onReject`, the host shows its `error`; the chosen file previews as an image or its name with Remove. Molecules `DropZone`-internal and `FilePreview`; helpers `isAcceptedFile`, `firstFile`, `previewKindOf`, `useFileDrop`. Labels are props (`FileDropLabels`); web-first, on native Choose and Paste do nothing.
