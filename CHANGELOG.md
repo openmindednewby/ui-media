@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.15.0
+
+- D-AWAY-INV-19 "A pasted bank link shows how to get the file": `FileDropArea` takes optional `onPasteText(text)`. Ctrl+V of text on the page (not into an input, textarea, select or contenteditable) and the Paste button when the clipboard holds no file but text both call it; without it the Paste button still calls `onPasteEmpty`. New pure `pastedText({ target, text })` and `readClipboardText()`.
+
 ## 0.14.1
 
 - INV-BILLS-1 N3: `FileDropArea` shows its Paste button only where the browser can read a file from the clipboard (`navigator.clipboard.read` present, clipboard-read permission not denied, web only); Ctrl+V on the page keeps working everywhere. New pure `canReadClipboardFiles(env)` and hook `useCanPasteFiles()`. Props unchanged.

@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react';
 import type { RefObject } from 'react';
 
 import { firstFile } from './fileAccept';
+import { pastedText } from './pastedText';
 
 function asElement(node: unknown): HTMLElement | null {
   const el = node as HTMLElement | null;
   return el !== null && typeof el.addEventListener === 'function' ? el : null;
 }
 
-/** Web: offers a file dropped on the host or pasted anywhere on the page; returns true while a drag is over the host. */
-export function useFileDrop(host: RefObject<unknown>, offer: (file: File) => void): boolean {
+/** Web: offers a file dropped on the host or pasted anywhere on the page, and pasted page text to `offerText`; true while a drag is over. */
+export function useFileDrop(host: RefObject<unknown>, offer: (file: File) => void, offerText?: (text: string) => void): boolean {
   const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
@@ -28,7 +29,11 @@ export function useFileDrop(host: RefObject<unknown>, offer: (file: File) => voi
     };
     const paste = (event: ClipboardEvent): void => {
       const file = firstFile(event.clipboardData?.files);
-      if (file === null) return;
+      if (file === null) {
+        const text = pastedText({ target: event.target, text: event.clipboardData?.getData('text/plain') ?? '' });
+        if (text !== '') offerText?.(text);
+        return;
+      }
       event.preventDefault();
       offer(file);
     };
@@ -42,7 +47,7 @@ export function useFileDrop(host: RefObject<unknown>, offer: (file: File) => voi
       el.removeEventListener('drop', drop);
       document.removeEventListener('paste', paste);
     };
-  }, [host, offer]);
+  }, [host, offer, offerText]);
 
   return dragging;
 }

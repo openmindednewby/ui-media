@@ -8,6 +8,7 @@ import { DropZone } from './DropZone';
 import { isAcceptedFile } from './fileAccept';
 import { FilePreview } from './FilePreview';
 import { readClipboardFile } from './readClipboardFile';
+import { readClipboardText } from './readClipboardText';
 import type { FileDropLabels } from './types';
 import { useCanPasteFiles } from './useCanPasteFiles';
 import { useFileDrop } from './useFileDrop';
@@ -33,12 +34,13 @@ export interface FileDropAreaProps {
   onReject: (file: File) => void;
   onRemove: () => void;
   onPasteEmpty?: () => void;
+  onPasteText?: (text: string) => void;
   error?: string;
   testID: string;
 }
 
-/** Takes one file by drop, paste (Ctrl+V, or the Paste button where the browser can read the clipboard) or pick; previews it; rejects files outside `accept`. */
-export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove, onPasteEmpty, error, testID }: FileDropAreaProps): React.ReactElement => {
+/** Takes one file by drop, paste (Ctrl+V or the Paste button) or pick; previews it; rejects files outside `accept`; pasted text goes to `onPasteText`. */
+export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove, onPasteEmpty, onPasteText, error, testID }: FileDropAreaProps): React.ReactElement => {
   const { theme } = useUi();
   const host = useRef<View>(null);
   const errorTone = theme.semantic.error[ERROR_STEP];
@@ -48,7 +50,7 @@ export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove,
     else onReject(next);
   }, [accept, onFile, onReject]);
 
-  const dragging = useFileDrop(host, offer);
+  const dragging = useFileDrop(host, offer, onPasteText);
   const canPaste = useCanPasteFiles();
 
   const choose = useCallback((): void => {
@@ -59,10 +61,16 @@ export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove,
 
   const paste = useCallback((): void => {
     void readClipboardFile().then((pasted) => {
-      if (pasted !== null) offer(pasted);
-      else onPasteEmpty?.();
+      if (pasted !== null) {
+        offer(pasted);
+        return undefined;
+      }
+      return readClipboardText().then((text) => {
+        if (text.trim() !== '' && onPasteText !== undefined) onPasteText(text);
+        else onPasteEmpty?.();
+      });
     });
-  }, [offer, onPasteEmpty]);
+  }, [offer, onPasteEmpty, onPasteText]);
 
   return (
     <View ref={host} style={styles.root} testID={testID}>
