@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.16.0
+
+- D-AWAY-INV-24 "Proof thumbnail on each row": `ProofThumbnail` in `@dloizides/ui-media/pdf`, a pressable fixed-size box showing a file's first PDF page (via `PdfPageImage`) or the image itself (blob URL, revoked on change/unmount), blank while bytes are null or the type is neither. Props: `bytes`, `mimeType`, `pages`, `width`, `height`, `label`, `hint`, `testID`, `onPress`. New pure `thumbnailKind(mimeType)` + `ThumbnailKind`.
+
 ## 0.15.0
 
 - D-AWAY-INV-19 "A pasted bank link shows how to get the file": `FileDropArea` takes optional `onPasteText(text)`. Ctrl+V of text on the page (not into an input, textarea, select or contenteditable) and the Paste button when the clipboard holds no file but text both call it; without it the Paste button still calls `onPasteEmpty`. New pure `pastedText({ target, text })` and `readClipboardText()`.
