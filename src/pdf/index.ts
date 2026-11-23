@@ -7,3 +7,6 @@ export { pageSize } from './pdfScale';
 export type { PageSize } from './pdfScale';
 export { PdfPageImage } from './PdfPageImage';
 export type { PdfPageImageProps } from './PdfPageImage';
+export { ProofThumbnail } from './ProofThumbnail';
+export type { ProofThumbnailProps } from './ProofThumbnail';
+export { thumbnailKind, ThumbnailKind } from './ThumbnailKind';
