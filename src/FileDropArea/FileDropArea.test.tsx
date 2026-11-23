@@ -63,6 +63,15 @@ describe('FileDropArea', () => {
     expect([onFile.mock.calls.length, onReject.mock.calls.length]).toEqual([0, 0]);
   });
 
+  it('with a link pasted on the page and onPasteText given, passes the link to it', () => {
+    const onPasteText = jest.fn();
+    render(<FileDropArea accept={ACCEPT} file={null} labels={LABELS} testID="area" onFile={jest.fn()} onPasteText={onPasteText} onReject={jest.fn()} onRemove={jest.fn()} />);
+
+    fireEvent.paste(document, { clipboardData: { files: [], getData: () => 'blob:https://bank.example/1' } });
+
+    expect(onPasteText).toHaveBeenCalledWith('blob:https://bank.example/1');
+  });
+
   it('while a file is dragged over, shows the drop prompt', () => {
     renderArea();
 

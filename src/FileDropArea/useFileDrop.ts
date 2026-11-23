@@ -30,7 +30,8 @@ export function useFileDrop(host: RefObject<unknown>, offer: (file: File) => voi
     const paste = (event: ClipboardEvent): void => {
       const file = firstFile(event.clipboardData?.files);
       if (file === null) {
-        const text = pastedText({ target: event.target, text: event.clipboardData?.getData('text/plain') ?? '' });
+        const data = event.clipboardData;
+        const text = pastedText({ target: event.target, text: typeof data?.getData === 'function' ? data.getData('text/plain') : '' });
         if (text !== '') offerText?.(text);
         return;
       }
