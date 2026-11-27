@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -36,11 +36,16 @@ export interface FileDropAreaProps {
   onPasteEmpty?: () => void;
   onPasteText?: (text: string) => void;
   error?: string;
+  autoFocusChoose?: boolean;
   testID: string;
 }
 
-/** Takes one file by drop, paste (Ctrl+V or the Paste button) or pick; previews it; rejects files outside `accept`; pasted text goes to `onPasteText`. */
-export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove, onPasteEmpty, onPasteText, error, testID }: FileDropAreaProps): React.ReactElement => {
+interface FocusableHost {
+  querySelector?: (selector: string) => { focus?: () => void } | null;
+}
+
+/** Takes one file by drop, paste (Ctrl+V or the Paste button) or pick; previews it; rejects files outside `accept`; pasted text goes to `onPasteText`. `autoFocusChoose` focuses Choose on mount (web). */
+export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove, onPasteEmpty, onPasteText, error, autoFocusChoose = false, testID }: FileDropAreaProps): React.ReactElement => {
   const { theme } = useUi();
   const host = useRef<View>(null);
   const errorTone = theme.semantic.error[ERROR_STEP];
@@ -49,6 +54,12 @@ export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove,
     if (isAcceptedFile(next, accept)) onFile(next);
     else onReject(next);
   }, [accept, onFile, onReject]);
+
+  useEffect(() => {
+    if (!autoFocusChoose) return;
+    const node = host.current as unknown as FocusableHost | null;
+    node?.querySelector?.(`[data-testid="${testID}-zone-choose"]`)?.focus?.();
+  }, [autoFocusChoose, testID]);
 
   const dragging = useFileDrop(host, offer, onPasteText);
   const canPaste = useCanPasteFiles();
