@@ -24,9 +24,9 @@ interface Handlers {
   onRemove: jest.Mock;
 }
 
-function renderArea(file: File | null = null): Handlers {
+function renderArea(file: File | null = null, autoFocusChoose?: boolean): Handlers {
   const handlers = { onFile: jest.fn(), onReject: jest.fn(), onRemove: jest.fn() };
-  render(<FileDropArea accept={ACCEPT} file={file} labels={LABELS} testID="area" {...handlers} />);
+  render(<FileDropArea accept={ACCEPT} autoFocusChoose={autoFocusChoose} file={file} labels={LABELS} testID="area" {...handlers} />);
   return handlers;
 }
 
@@ -86,5 +86,21 @@ describe('FileDropArea', () => {
     fireEvent.click(screen.getByTestId('area-preview-remove'));
 
     expect(onRemove).toHaveBeenCalledTimes(1);
+  });
+
+  it('with autoFocusChoose, focuses the choose button on mount', () => {
+    renderArea(null, true);
+
+    const active = document.activeElement;
+
+    expect(active?.getAttribute('data-testid')).toBe('area-zone-choose');
+  });
+
+  it('without autoFocusChoose, leaves focus where it was', () => {
+    renderArea();
+
+    const active = document.activeElement;
+
+    expect(active).toBe(document.body);
   });
 });
