@@ -21,6 +21,7 @@ const TEXT_LINES = 2;
 const PROMPT_SIZE = 15;
 const HINT_SIZE = 13;
 const ACCENT_STEP = '500';
+const LABEL_JOIN = '. ';
 
 const styles = StyleSheet.create({
   strip: { minHeight: STRIP_HEIGHT, paddingHorizontal: PAD_X, paddingVertical: PAD_Y, borderRadius: RADIUS, borderWidth: BORDER, gap: GAP, flexDirection: 'row', alignItems: 'stretch', width: '100%' },
@@ -31,11 +32,12 @@ const styles = StyleSheet.create({
   hint: { fontSize: HINT_SIZE },
 });
 
-/** The empty drop target as one strip at least 56 px tall: icon and text (two lines at most each) form the Choose button; Paste, when `onPaste` is given, is the shared 44 px sm Button. */
+/** The empty drop target as one strip at least 56 px tall: icon and text (two lines at most each) form the Choose button, whose label carries the full prompt and hint; Paste, when `onPaste` is given, is the shared 44 px sm Button. */
 export const CompactDropZone = ({ labels, dragging, onChoose, onPaste, testID }: DropZoneProps): React.ReactElement => {
   const { theme } = useUi();
   const { colors } = theme;
   const accent = theme.palette.primary[ACCENT_STEP];
+  const prompt = dragging ? labels.dropPrompt : labels.prompt;
 
   return (
     <View
@@ -47,11 +49,11 @@ export const CompactDropZone = ({ labels, dragging, onChoose, onPaste, testID }:
       ]}
       testID={testID}
     >
-      <Pressable accessibilityHint={labels.chooseHint} accessibilityLabel={labels.choose} accessibilityRole="button" style={styles.choose} testID={`${testID}-choose`} onPress={onChoose}>
+      <Pressable accessibilityHint={labels.chooseHint} accessibilityLabel={[labels.choose, prompt, labels.hint].join(LABEL_JOIN)} accessibilityRole="button" style={styles.choose} testID={`${testID}-choose`} onPress={onChoose}>
         <UploadGlyph color={dragging ? accent : colors.textSecondary} testID={`${testID}-icon`} />
         <View style={styles.lines}>
           <Text numberOfLines={TEXT_LINES} style={[styles.prompt, { color: dragging ? accent : colors.text }]} testID={`${testID}-prompt`}>
-            {dragging ? labels.dropPrompt : labels.prompt}
+            {prompt}
           </Text>
           <Text numberOfLines={TEXT_LINES} style={[styles.hint, { color: colors.textSecondary }]} testID={`${testID}-hint`}>{labels.hint}</Text>
         </View>

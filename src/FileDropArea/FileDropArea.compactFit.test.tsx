@@ -1,9 +1,10 @@
-import { render } from '@testing-library/react';
-import { Text } from 'react-native';
+import { render, renderHook, screen } from '@testing-library/react';
+import { StyleSheet, Text } from 'react-native';
 
 import type { TextProps } from 'react-native';
 
-import { Button } from '@dloizides/ui-buttons';
+import { Button, buildButtonStyles } from '@dloizides/ui-buttons';
+import { useUi } from '@dloizides/ui-feedback';
 
 import { FileDropArea } from './FileDropArea';
 import { FileDropLayout } from './FileDropLayout';
@@ -33,18 +34,36 @@ const LABELS = {
   preview: 'Chosen file',
 };
 const TWO_LINES = 2;
+const PASTE_MIN_HEIGHT = 44;
 
 function renderCompact(): void {
   render(<FileDropArea accept={['image/png']} file={null} labels={LABELS} layout={FileDropLayout.Compact} testID="area" onFile={jest.fn()} onReject={jest.fn()} onRemove={jest.fn()} />);
 }
 
 describe('CompactDropZone', () => {
-  it('with onPaste, renders Paste as the shared Button at the 44px sm size', () => {
+  it('with onPaste, renders Paste as the shared sm Button', () => {
     renderCompact();
 
     const props = jest.mocked(Button).mock.calls.map(([p]) => p).find((p) => p.testID === 'area-zone-paste');
 
     expect([props?.size, props?.label]).toEqual(['sm', 'Paste']);
+  });
+
+  it('with onPaste, gives Paste a 44px minimum height', () => {
+    renderCompact();
+
+    const props = jest.mocked(Button).mock.calls.map(([p]) => p).find((p) => p.testID === 'area-zone-paste');
+    const { result } = renderHook(() => useUi());
+
+    expect(StyleSheet.flatten(buildButtonStyles(result.current.theme, props?.variant ?? 'outline', props?.size ?? 'md').container).minHeight).toBe(PASTE_MIN_HEIGHT);
+  });
+
+  it('with a long hint, keeps the full hint in the Choose label', () => {
+    renderCompact();
+
+    const label = screen.getByTestId('area-zone-choose').getAttribute('aria-label');
+
+    expect(label).toContain(LONG);
   });
 
   it('with a long prompt and hint, caps each at two lines', () => {
