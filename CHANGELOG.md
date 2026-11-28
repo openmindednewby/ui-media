@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.18.2
+
+- INV-QUOTE-1 "Compact strip text fit": the compact `FileDropArea` prompt and hint wrap instead of truncating (TEXT-FIT-1), and Paste stretches to the Choose height so both buttons share one height (was 44 vs 48 px).
+
 ## 0.18.1
 
 - INV-QUOTE-1 "Compact strip upload icon": the compact `FileDropArea` strip leads with a 24 px upload icon (arrow out of a tray, drawn with views, hidden from screen readers, accent colour while dragging) inside the Choose button; text keeps one line each and shrinks before the icon or Paste. Strip stays >= 56 px, buttons >= 44 px. Showcase story adds the strip at a 320 px phone width.
