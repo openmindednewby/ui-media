@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.18.0
+
+- INV-QUOTE-1 D28 "Compact drop strip": `FileDropArea` takes optional `layout` (`FileDropLayout.Full` default, `FileDropLayout.Compact`). Compact is one row about 56 px tall: the prompt and hint block is the Choose button (role button, choose label + hint, >= 44 px), Paste sits at the end when the clipboard can be read; drop, Ctrl+V, `autoFocusChoose` and the drop prompt behave as in the full layout. Showcase story `FileDropAreaShowcase` shows both.
+
 ## 0.16.0
 
 - D-AWAY-INV-24 "Proof thumbnail on each row": `ProofThumbnail` in `@dloizides/ui-media/pdf`, a pressable fixed-size box showing a file's first PDF page (via `PdfPageImage`) or the image itself (blob URL, revoked on change/unmount), blank while bytes are null or the type is neither. Props: `bytes`, `mimeType`, `pages`, `width`, `height`, `label`, `hint`, `testID`, `onPress`. New pure `thumbnailKind(mimeType)` + `ThumbnailKind`.

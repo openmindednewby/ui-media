@@ -4,8 +4,10 @@ import { StyleSheet, Text, View } from 'react-native';
 
 import { useUi } from '@dloizides/ui-feedback';
 
+import { CompactDropZone } from './CompactDropZone';
 import { DropZone } from './DropZone';
 import { isAcceptedFile } from './fileAccept';
+import { FileDropLayout } from './FileDropLayout';
 import { FilePreview } from './FilePreview';
 import { readClipboardFile } from './readClipboardFile';
 import { readClipboardText } from './readClipboardText';
@@ -37,6 +39,7 @@ export interface FileDropAreaProps {
   onPasteText?: (text: string) => void;
   error?: string;
   autoFocusChoose?: boolean;
+  layout?: FileDropLayout;
   testID: string;
 }
 
@@ -44,11 +47,12 @@ interface FocusableHost {
   querySelector?: (selector: string) => { focus?: () => void } | null;
 }
 
-/** Takes one file by drop, paste (Ctrl+V or the Paste button) or pick; previews it; rejects files outside `accept`; pasted text goes to `onPasteText`. `autoFocusChoose` focuses Choose on mount (web). */
-export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove, onPasteEmpty, onPasteText, error, autoFocusChoose = false, testID }: FileDropAreaProps): React.ReactElement => {
+/** Takes one file by drop, paste (Ctrl+V or the Paste button) or pick; previews it; rejects files outside `accept`; pasted text goes to `onPasteText`. `autoFocusChoose` focuses Choose on mount (web); `layout` Compact is one ~56 px strip. */
+export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove, onPasteEmpty, onPasteText, error, autoFocusChoose = false, layout = FileDropLayout.Full, testID }: FileDropAreaProps): React.ReactElement => {
   const { theme } = useUi();
   const host = useRef<View>(null);
   const errorTone = theme.semantic.error[ERROR_STEP];
+  const Zone = layout === FileDropLayout.Compact ? CompactDropZone : DropZone;
 
   const offer = useCallback((next: File): void => {
     if (isAcceptedFile(next, accept)) onFile(next);
@@ -91,7 +95,7 @@ export const FileDropArea = ({ labels, accept, file, onFile, onReject, onRemove,
         </View>
       )}
       {file === null ? (
-        <DropZone dragging={dragging} labels={labels} testID={`${testID}-zone`} onChoose={choose} onPaste={canPaste ? paste : undefined} />
+        <Zone dragging={dragging} labels={labels} testID={`${testID}-zone`} onChoose={choose} onPaste={canPaste ? paste : undefined} />
       ) : (
         <FilePreview file={file} labels={labels} testID={`${testID}-preview`} onRemove={onRemove} />
       )}

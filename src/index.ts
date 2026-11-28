@@ -34,6 +34,7 @@ export type {
 export { FileDropArea } from './FileDropArea/FileDropArea';
 export type { FileDropAreaProps } from './FileDropArea/FileDropArea';
 export type { FileDropLabels } from './FileDropArea/types';
+export { FileDropLayout } from './FileDropArea/FileDropLayout';
 export { FilePreview } from './FileDropArea/FilePreview';
 export type { FilePreviewProps } from './FileDropArea/FilePreview';
 export { FilePreviewKind } from './FileDropArea/FilePreviewKind';
