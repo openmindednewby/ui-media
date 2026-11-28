@@ -1,9 +1,13 @@
 # Changelog
 
+## 0.18.4
+
+- Review fixes for 0.18.3: the compact `FileDropArea` Choose button reads the full prompt and hint to screen readers (`accessibilityLabel` is the choose label, prompt and hint; `accessibilityHint` stays the choose hint), so a hint ellipsized at two lines stays reachable (TEXT-FIT-1). CHANGELOG.md is CRLF again.
 
 ## 0.18.3
 
 - INV-QUOTE-1 "Compact strip fit v3": the compact `FileDropArea` prompt and hint cap at two lines each (a long hint no longer grows the 360 px strip to ~110 px), and Paste is the shared `@dloizides/ui-buttons` `Button` again at `size="sm"` (44 px).
+
 ## 0.18.2
 
 - INV-QUOTE-1 "Compact strip text fit": the compact `FileDropArea` prompt and hint wrap instead of truncating (TEXT-FIT-1), and Paste stretches to the Choose height so both buttons share one height (was 44 vs 48 px).

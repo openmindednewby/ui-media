@@ -60,12 +60,12 @@ describe('FileDropArea compact layout', () => {
     expect(onFile).toHaveBeenCalledWith(PNG);
   });
 
-  it('for screen readers, names the strip as the choose button with its hint', () => {
+  it('for screen readers, names the strip as the choose button with the full prompt and hint', () => {
     renderCompact();
 
     const strip = screen.getByTestId('area-zone-choose');
 
-    expect([strip.getAttribute('role'), strip.getAttribute('aria-label')]).toEqual(['button', 'Choose file']);
+    expect([strip.getAttribute('role'), strip.getAttribute('aria-label')]).toEqual(['button', 'Choose file. Drop a file here. PDF, PNG or JPG']);
   });
 
   it('keeps the hint text on the strip', () => {
