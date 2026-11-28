@@ -1,5 +1,17 @@
 # Changelog
 
+
+## 0.18.3
+
+- INV-QUOTE-1 "Compact strip fit v3": the compact `FileDropArea` prompt and hint cap at two lines each (a long hint no longer grows the 360 px strip to ~110 px), and Paste is the shared `@dloizides/ui-buttons` `Button` again at `size="sm"` (44 px).
+## 0.18.2
+
+- INV-QUOTE-1 "Compact strip text fit": the compact `FileDropArea` prompt and hint wrap instead of truncating (TEXT-FIT-1), and Paste stretches to the Choose height so both buttons share one height (was 44 vs 48 px).
+
+## 0.18.1
+
+- INV-QUOTE-1 "Compact strip upload icon": the compact `FileDropArea` strip leads with a 24 px upload icon (arrow out of a tray, drawn with views, hidden from screen readers, accent colour while dragging) inside the Choose button; text keeps one line each and shrinks before the icon or Paste. Strip stays >= 56 px, buttons >= 44 px. Showcase story adds the strip at a 320 px phone width.
+
 ## 0.18.0
 
 - INV-QUOTE-1 D28 "Compact drop strip": `FileDropArea` takes optional `layout` (`FileDropLayout.Full` default, `FileDropLayout.Compact`). Compact is one row about 56 px tall: the prompt and hint block is the Choose button (role button, choose label + hint, >= 44 px), Paste sits at the end when the clipboard can be read; drop, Ctrl+V, `autoFocusChoose` and the drop prompt behave as in the full layout. Showcase story `FileDropAreaShowcase` shows both.
