@@ -10,6 +10,7 @@ import { FileDropLayout } from '../FileDropArea/FileDropLayout';
 import type { FeedbackTheme } from '@dloizides/ui-feedback';
 
 const GAP = 16;
+const PHONE_WIDTH = 320;
 const ACCEPT = ['application/pdf', 'image/png', 'image/jpeg'];
 const LABELS = {
   prompt: 'showcase.fileDrop.prompt',
@@ -24,18 +25,21 @@ const LABELS = {
   preview: 'showcase.fileDrop.preview',
 };
 
-const styles = StyleSheet.create({ column: { gap: GAP, width: '100%' } });
+const styles = StyleSheet.create({ column: { gap: GAP, width: '100%' }, phone: { width: PHONE_WIDTH, maxWidth: '100%' } });
 
 export interface FileDropAreaShowcaseProps {
   theme: FeedbackTheme;
 }
 
-/** Showcase story: the drop area in both layouts, the full box and the compact one-row strip. */
+/** Showcase story: the full box, the compact strip led by its upload icon, and the strip at a 320 px phone width. */
 export const FileDropAreaShowcase = ({ theme }: FileDropAreaShowcaseProps): React.ReactElement => (
   <FeedbackUiProvider t={(key) => key} theme={theme}>
     <View style={styles.column}>
       <FileDropArea accept={ACCEPT} file={null} labels={LABELS} layout={FileDropLayout.Full} testID="file-drop-full" onFile={() => undefined} onReject={() => undefined} onRemove={() => undefined} />
       <FileDropArea accept={ACCEPT} file={null} labels={LABELS} layout={FileDropLayout.Compact} testID="file-drop-compact" onFile={() => undefined} onReject={() => undefined} onRemove={() => undefined} />
+      <View style={styles.phone}>
+        <FileDropArea accept={ACCEPT} file={null} labels={LABELS} layout={FileDropLayout.Compact} testID="file-drop-compact-phone" onFile={() => undefined} onReject={() => undefined} onRemove={() => undefined} />
+      </View>
     </View>
   </FeedbackUiProvider>
 );
